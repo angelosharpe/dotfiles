@@ -16,7 +16,7 @@ map <C-c> :tabnew
 map <C-m> :make
 set spelllang=en
 set modeline
-set mouse=a
+set mouse=r
 set encoding=utf-8
 set cursorline
 set foldlevelstart=20
@@ -51,9 +51,18 @@ set list
 set listchars=tab:→\ ,trail:·,precedes:⇐,extends:⇒
 
 " Highlight lines longer than 80 characters
-:au BufWinEnter * let w:m1=matchadd('Search', '\%<81v.\%>77v', -1)
-:au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
-:au BufWinLeave * call clearmatches()
+":au BufWinEnter * let w:m1=matchadd('Search', '\%<81v.\%>77v', -1)
+":au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
+":au BufWinLeave * call clearmatches()
+if exists('+colorcolumn')
+  set colorcolumn=80
+endif
+
+" hilight status bar when in insert mode
+if version >= 700
+  au InsertEnter * hi StatusLine ctermfg=235 ctermbg=2
+  au InsertLeave * hi StatusLine ctermbg=240 ctermfg=12
+endif
 
 " Make frequent typos work.
 command Q :q
@@ -78,6 +87,7 @@ set go-=r go-=R go-=l go-=L go-=b
 " themes
 colorscheme zenburn
 colors zenburn
+
 
 " font
 set guifont=Monospace\ 9
