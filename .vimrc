@@ -1,19 +1,126 @@
+set nocompatible
+set hidden
+
+call plug#begin('~/.vim/plugged')
+Plug 'airblade/vim-gitgutter'
+Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-fugitive'
+Plug 'vim-ctrlspace/vim-ctrlspace'
+Plug 'davidhalter/jedi-vim'
+Plug 'bling/vim-airline'
+Plug 'scrooloose/syntastic'
+Plug 'easymotion/vim-easymotion'
+Plug 'tomtom/tcomment_vim'
+Plug 'haya14busa/incsearch.vim'
+Plug 'haya14busa/incsearch-easymotion.vim'
+call plug#end()
+
+"" Nerd tree
+" Ctrl+n to open nerd tree
+map <C-n> :NERDTreeToggle<CR>
+" show nerd tree in empty buffer
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" open NERDTree automatically when vim starts up on opening a directory
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+" ignore .pyc etc.
+let NERDTreeIgnore = ['\.pyc$', '__pycache__']
+
+""""""""""""""""""""""""""""""""" CtrlSpace
+set showtabline=0
+if executable("ag")
+    let g:CtrlSpaceGlobCommand = 'ag -l --nocolor -g ""'
+endif
+nnoremap <silent><C-p> :CtrlSpace O<CR>
+
+let g:CtrlSpaceLoadLastWorkspaceOnStart = 1
+let g:CtrlSpaceSaveWorkspaceOnSwitch = 1
+let g:CtrlSpaceSaveWorkspaceOnExit = 1
+""""""""""""""""""""""""""""""""" CtrlSpace
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+""""""""""""""""""""""""""""""""" EasyMotion
+" <Leader>f{char} to move to {char}
+map  <Leader>f <Plug>(easymotion-bd-f)
+nmap <Leader>f <Plug>(easymotion-overwin-f)
+"
+" s{char}{char} to move to {char}{char}
+nmap s <Plug>(easymotion-overwin-f2)
+
+" Move to line
+map <Leader>L <Plug>(easymotion-bd-jk)
+nmap <Leader>L <Plug>(easymotion-overwin-line)
+
+" Move to word
+map  <Leader>w <Plug>(easymotion-bd-w)
+nmap <Leader>w <Plug>(easymotion-overwin-w)
+
+" You can use other keymappings like <C-l> instead of <CR> if you want to
+" use these mappings as default search and somtimes want to move cursor with
+" EasyMotion.
+function! s:incsearch_config(...) abort
+  return incsearch#util#deepextend(deepcopy({
+  \   'modules': [incsearch#config#easymotion#module({'overwin': 1})],
+  \   'keymap': {
+  \     "\<CR>": '<Over>(easymotion)'
+  \   },
+  \   'is_expr': 0
+  \ }), get(a:, 1, {}))
+endfunction
+
+noremap <silent><expr> /  incsearch#go(<SID>incsearch_config())
+noremap <silent><expr> ?  incsearch#go(<SID>incsearch_config({'command': '?'}))
+noremap <silent><expr> g/ incsearch#go(<SID>incsearch_config({'is_stay': 1}))
+
+""""""""""""""""""""""""""""""""" Settings
+" Set to auto read when a file is changed from the outside
+set autoread
+" Ignore compiled files
+set wildignore=*.o,*~,*.pyc
+if has("win16") || has("win32")
+    set wildignore+=.git\*,.hg\*,.svn\*
+else
+    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+endif
+" Configure backspace so it acts as it should act
+set backspace=eol,start,indent
+set whichwrap+=<,>,h,l
+" For regular expressions turn magic on
+set magic
+" Show matching brackets when text indicator is over them
+set showmatch
+" How many tenths of a second to blink when matching brackets
+set mat=2
+" Ignore case when searching
+set ignorecase
+" When searching try to be smart about cases
+set smartcase
+" Highlight search results
+set hlsearch
+" Turn backup off, since most stuff is in SVN, git etc. anyways...
+set nobackup
+set nowb
+set noswapfile
 set termencoding=utf-8
-set shiftwidth=8
 set number
 set showmode
 set showcmd
 set ruler
 set ignorecase
 set incsearch
-set smartindent
 set confirm
 syntax on
-map <C-l> :tabnext<CR>
-map <C-h> :tabprev<CR>
-map <C-x> :q<CR>
-map <C-c> :tabnew
-map <C-m> :make
+set laststatus=2
+
+" pane navigation
+nnoremap <C-Down> <C-W><C-J>
+nnoremap <C-Up> <C-W><C-K>
+nnoremap <C-Right> <C-W><C-L>
+nnoremap <C-Left> <C-W><C-H>
+
+" map <C-m> :make
 set spelllang=en
 set modeline
 set mouse=r
@@ -21,30 +128,11 @@ set encoding=utf-8
 set cursorline
 set foldlevelstart=20
 set foldmethod=syntax
-"so ~/.vim/shortcut.vim
-"so ~/.vim/skeletons.vim
-set noeb vb t_vb=
-
-set expandtab
-set shiftwidth=4
-set softtabstop=4
-set tabstop=4
-
-filetype plugin indent on
-autocmd FileType python setlocal expandtab shiftwidth=4 softtabstop=4
-autocmd FileType c,cpp setlocal noexpandtab shiftwidth=4 softtabstop=4
 
 autocmd BufReadPost *
 \ if line("'\"") > 0 && line ("'\"") <= line("$") |
 \   exe "normal! g'\"" |
 \ endif
-
-nnoremap <silent> <F9> :TlistToggle<CR>
-nnoremap <silent> <F8> :set spell!<CR>
-nnoremap <silent> <F5> :!make<CR>
-nnoremap <silent> <F10> :set spelllang=en<CR>
-nnoremap <silent> <F11> :set spelllang=cs<CR>
-let g:proj_flags='imstg'
 
 " show tabs as blank-padded arrows, trailing spaces as middle-dots
 set list
@@ -58,20 +146,12 @@ if exists('+colorcolumn')
   set colorcolumn=80
 endif
 
-" hilight status bar when in insert mode
-if version >= 700
-  au InsertEnter * hi StatusLine ctermfg=235 ctermbg=2
-  au InsertLeave * hi StatusLine ctermbg=240 ctermfg=12
-endif
-
 " Make frequent typos work.
 command Q :q
 command W :w
 command Wq :wq
 command WQ :wq
-
-" Automatically change directory to the one containing the current file.
-autocmd BufEnter * silent! lcd %:p:h
+nmap <leader>w :w!<cr>
 
 " Tell vim to remember certain things when we exit
 "  '10  :  marks will be remembered for up to 20 previously edited files
@@ -85,12 +165,11 @@ set viminfo='20,\"100,:20,%,n~/.vim/viminfo
 set go-=r go-=R go-=l go-=L go-=b
 
 " themes
-colorscheme zenburn
-colors zenburn
-
+colorscheme monokai
 
 " font
 set guifont=Monospace\ 9
 
-" kernel tags
-set tags=./tags,tags,../tags,../../tags,../../../tags,../../../../tags
+" tabs
+au FileType python setl shiftwidth=4 tabstop=4 smartindent
+
