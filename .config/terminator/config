@@ -1,0 +1,20 @@
+[global_config]
+  enabled_plugins = APTURLHandler, MavenPluginURLHandler, LaunchpadBugURLHandler
+[keybindings]
+[profiles]
+  [[default]]
+    show_titlebar = False
+    scroll_on_output = False
+    font = Monospace 9
+    use_system_font = False
+    scrollback_infinite = True
+    background_image = None
+[layouts]
+  [[default]]
+    [[[child1]]]
+      type = Terminal
+      parent = window0
+    [[[window0]]]
+      type = Window
+      parent = ""
+[plugins]
