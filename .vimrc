@@ -9,13 +9,12 @@ Plug 'vim-ctrlspace/vim-ctrlspace'
 Plug 'davidhalter/jedi-vim'
 Plug 'bling/vim-airline'
 Plug 'scrooloose/syntastic'
-Plug 'easymotion/vim-easymotion'
 Plug 'tomtom/tcomment_vim'
-Plug 'haya14busa/incsearch.vim'
-Plug 'haya14busa/incsearch-easymotion.vim'
+Plug 'easymotion/vim-easymotion'
+Plug 'mileszs/ack.vim'
 call plug#end()
 
-"" Nerd tree
+""""""""""""""""""""""""""""""""" Nerd tree
 " Ctrl+n to open nerd tree
 map <C-n> :NERDTreeToggle<CR>
 " show nerd tree in empty buffer
@@ -26,6 +25,9 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 " ignore .pyc etc.
 let NERDTreeIgnore = ['\.pyc$', '__pycache__']
 
+""""""""""""""""""""""""""""""""" Syntactic
+let g:syntastic_mode_map = { 'passive_filetypes': ['python'] }
+
 """"""""""""""""""""""""""""""""" CtrlSpace
 set showtabline=0
 if executable("ag")
@@ -33,46 +35,29 @@ if executable("ag")
 endif
 nnoremap <silent><C-p> :CtrlSpace O<CR>
 
+" save sessions
 let g:CtrlSpaceLoadLastWorkspaceOnStart = 1
 let g:CtrlSpaceSaveWorkspaceOnSwitch = 1
 let g:CtrlSpaceSaveWorkspaceOnExit = 1
+
+" airline specific setting
+let g:airline_exclude_preview = 1
+
 """"""""""""""""""""""""""""""""" CtrlSpace
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-""""""""""""""""""""""""""""""""" EasyMotion
-" <Leader>f{char} to move to {char}
-map  <Leader>f <Plug>(easymotion-bd-f)
-nmap <Leader>f <Plug>(easymotion-overwin-f)
-"
-" s{char}{char} to move to {char}{char}
-nmap s <Plug>(easymotion-overwin-f2)
 
-" Move to line
-map <Leader>L <Plug>(easymotion-bd-jk)
-nmap <Leader>L <Plug>(easymotion-overwin-line)
+""""""""""""""""""""""""""""""""" Ack(ag)
+if executable('ag')
+    let g:ackprg = 'ag --smart-case'
+endif
 
-" Move to word
-map  <Leader>w <Plug>(easymotion-bd-w)
-nmap <Leader>w <Plug>(easymotion-overwin-w)
-
-" You can use other keymappings like <C-l> instead of <CR> if you want to
-" use these mappings as default search and somtimes want to move cursor with
-" EasyMotion.
-function! s:incsearch_config(...) abort
-  return incsearch#util#deepextend(deepcopy({
-  \   'modules': [incsearch#config#easymotion#module({'overwin': 1})],
-  \   'keymap': {
-  \     "\<CR>": '<Over>(easymotion)'
-  \   },
-  \   'is_expr': 0
-  \ }), get(a:, 1, {}))
-endfunction
-
-noremap <silent><expr> /  incsearch#go(<SID>incsearch_config())
-noremap <silent><expr> ?  incsearch#go(<SID>incsearch_config({'command': '?'}))
-noremap <silent><expr> g/ incsearch#go(<SID>incsearch_config({'is_stay': 1}))
+cnoreabbrev ag Ack
+cnoreabbrev aG Ack
+cnoreabbrev Ag Ack
+cnoreabbrev AG Ack
 
 """"""""""""""""""""""""""""""""" Settings
 " Set to auto read when a file is changed from the outside
@@ -120,10 +105,18 @@ nnoremap <C-Up> <C-W><C-K>
 nnoremap <C-Right> <C-W><C-L>
 nnoremap <C-Left> <C-W><C-H>
 
+" move lines
+nnoremap <C-j> :m .+1<CR>==
+nnoremap <C-k> :m .-2<CR>==
+inoremap <C-j> <Esc>:m .+1<CR>==gi
+inoremap <C-k> <Esc>:m .-2<CR>==gi
+vnoremap <C-j> :m '>+1<CR>gv=gv
+vnoremap <C-k> :m '<-2<CR>gv=gv
+
 " map <C-m> :make
 set spelllang=en
 set modeline
-set mouse=r
+set mouse=a
 set encoding=utf-8
 set cursorline
 set foldlevelstart=20
@@ -171,5 +164,5 @@ colorscheme monokai
 set guifont=Monospace\ 9
 
 " tabs
-au FileType python setl shiftwidth=4 tabstop=4 smartindent
+au FileType python setl shiftwidth=4 tabstop=4 smartindent noexpandtab
 
