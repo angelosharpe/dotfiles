@@ -5,16 +5,16 @@ call plug#begin('~/.vim/plugged')
 Plug 'airblade/vim-gitgutter'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
-"Plug 'vim-ctrlspace/vim-ctrlspace'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'davidhalter/jedi-vim'
-"Plug 'Shougo/neocomplete.vim'
 Plug 'bling/vim-airline'
 Plug 'scrooloose/syntastic'
 Plug 'tomtom/tcomment_vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'mileszs/ack.vim'
 Plug 'nathanaelkane/vim-indent-guides'
+Plug 'xolox/vim-session'
+Plug 'xolox/vim-misc'
 call plug#end()
 
 """"""""""""""""""""""""""""""""" Nerd tree
@@ -30,33 +30,8 @@ let NERDTreeIgnore = ['\.pyc$', '__pycache__']
 
 """"""""""""""""""""""""""""""""" Syntactic
 let g:syntastic_mode_map = { 'passive_filetypes': ['python'] }
-
-""""""""""""""""""""""""""""""""" Neocomplete
-"let g:neocomplete#enable_at_startup = 1
-"let g:neocomplete#enable_smart_case = 1
-"let g:neocomplete#sources#syntax#min_keyword_length = 3
-"
-"" Enable omni completion.
-"autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-"autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-"autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-"autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-"autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-"
-"" Recommended key-mappings.
-"" <CR>: close popup and save indent.
-"inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-"function! s:my_cr_function()
-"  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-"endfunction
-"
-"" <TAB>: completion.
-"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-"" <C-h>, <BS>: close popup and delete backword char.
-"inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-"inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 """"""""""""""""""""""""""""""""" jedi-vim
-let g:jedi#use_splits_not_buffers = "left"
+"let g:jedi#use_splits_not_buffers = "left"
 """"""""""""""""""""""""""""""""" Ack(ag)
 if executable('ag')
     let g:ackprg = 'ag --smart-case'
@@ -69,6 +44,9 @@ cnoreabbrev AG Ack
 """"""""""""""""""""""""""""""""" Airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
+""""""""""""""""""""""""""""""""" vim-session
+let g:session_autosave_periodic = 5
+let g:session_autoload = 'yes'
 """"""""""""""""""""""""""""""""" Settings
 " Set to auto read when a file is changed from the outside
 set autoread
@@ -124,7 +102,7 @@ set laststatus=2
 " buffer navigation
 nnoremap <C-Right> :bnext<CR>
 nnoremap <C-Left> :bprevious<CR>
-nnoremap <C-x> :bd<CR>
+nnoremap <C-x> :bp\|bd #<CR>
 
 "switch to pane up
 nnoremap <Esc>[1;3A <C-W><C-K>
