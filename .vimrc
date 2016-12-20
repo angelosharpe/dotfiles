@@ -5,13 +5,16 @@ call plug#begin('~/.vim/plugged')
 Plug 'airblade/vim-gitgutter'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
-Plug 'vim-ctrlspace/vim-ctrlspace'
+"Plug 'vim-ctrlspace/vim-ctrlspace'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'davidhalter/jedi-vim'
+"Plug 'Shougo/neocomplete.vim'
 Plug 'bling/vim-airline'
 Plug 'scrooloose/syntastic'
 Plug 'tomtom/tcomment_vim'
 Plug 'easymotion/vim-easymotion'
 Plug 'mileszs/ack.vim'
+Plug 'nathanaelkane/vim-indent-guides'
 call plug#end()
 
 """"""""""""""""""""""""""""""""" Nerd tree
@@ -28,27 +31,32 @@ let NERDTreeIgnore = ['\.pyc$', '__pycache__']
 """"""""""""""""""""""""""""""""" Syntactic
 let g:syntastic_mode_map = { 'passive_filetypes': ['python'] }
 
-""""""""""""""""""""""""""""""""" CtrlSpace
-set showtabline=0
-if executable("ag")
-    let g:CtrlSpaceGlobCommand = 'ag -l --nocolor -g ""'
-endif
-nnoremap <silent><C-p> :CtrlSpace O<CR>
-
-" save sessions
-let g:CtrlSpaceLoadLastWorkspaceOnStart = 1
-let g:CtrlSpaceSaveWorkspaceOnSwitch = 1
-let g:CtrlSpaceSaveWorkspaceOnExit = 1
-
-" airline specific setting
-let g:airline_exclude_preview = 1
-
-""""""""""""""""""""""""""""""""" CtrlSpace
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-
+""""""""""""""""""""""""""""""""" Neocomplete
+"let g:neocomplete#enable_at_startup = 1
+"let g:neocomplete#enable_smart_case = 1
+"let g:neocomplete#sources#syntax#min_keyword_length = 3
+"
+"" Enable omni completion.
+"autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+"autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+"autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+"autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+"autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+"
+"" Recommended key-mappings.
+"" <CR>: close popup and save indent.
+"inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+"function! s:my_cr_function()
+"  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+"endfunction
+"
+"" <TAB>: completion.
+"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+"" <C-h>, <BS>: close popup and delete backword char.
+"inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+"inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+""""""""""""""""""""""""""""""""" jedi-vim
+let g:jedi#use_splits_not_buffers = "left"
 """"""""""""""""""""""""""""""""" Ack(ag)
 if executable('ag')
     let g:ackprg = 'ag --smart-case'
@@ -58,7 +66,9 @@ cnoreabbrev ag Ack
 cnoreabbrev aG Ack
 cnoreabbrev Ag Ack
 cnoreabbrev AG Ack
-
+""""""""""""""""""""""""""""""""" Airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#fnamemod = ':t'
 """"""""""""""""""""""""""""""""" Settings
 " Set to auto read when a file is changed from the outside
 set autoread
@@ -99,11 +109,32 @@ set confirm
 syntax on
 set laststatus=2
 
-" pane navigation
-nnoremap <C-Down> <C-W><C-J>
-nnoremap <C-Up> <C-W><C-K>
-nnoremap <C-Right> <C-W><C-L>
-nnoremap <C-Left> <C-W><C-H>
+""""""""""""""""""""""""""""""' tab/pane nav 1
+"" pane navigation
+"nnoremap <C-Down> <C-W><C-J>
+"nnoremap <C-Up> <C-W><C-K>
+"nnoremap <C-Right> <C-W><C-L>
+"nnoremap <C-Left> <C-W><C-H>
+"
+"" tab navigation
+"nnoremap <C-h> :tabprevious<CR>
+"nnoremap <C-l> :tabnext<CR>
+""""""""""""""""""""""""""""""' / tab/pane nav 1
+""""""""""""""""""""""""""""""' tab/pane nav 2
+" buffer navigation
+nnoremap <C-Right> :bnext<CR>
+nnoremap <C-Left> :bprevious<CR>
+nnoremap <C-x> :bd<CR>
+
+"switch to pane up
+nnoremap <Esc>[1;3A <C-W><C-K>
+"switch to pane down
+nnoremap <Esc>[1;3B <C-W><C-J>
+"switch to pane right
+nnoremap <Esc>[1;3C <C-W><C-L>
+"switch to left pane
+nnoremap <Esc>[1;3D <C-W><C-H>
+""""""""""""""""""""""""""""""' / tab/pane nav 2
 
 " move lines
 nnoremap <C-j> :m .+1<CR>==
