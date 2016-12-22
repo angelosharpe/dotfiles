@@ -15,6 +15,7 @@ Plug 'mileszs/ack.vim'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'xolox/vim-session'
 Plug 'xolox/vim-misc'
+Plug 'tmhedberg/SimpylFold'
 call plug#end()
 
 """"""""""""""""""""""""""""""""" Nerd tree
@@ -27,11 +28,16 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
 " ignore .pyc etc.
 let NERDTreeIgnore = ['\.pyc$', '__pycache__']
-
 """"""""""""""""""""""""""""""""" Syntactic
-let g:syntastic_mode_map = { 'passive_filetypes': ['python'] }
+"let g:syntastic_mode_map = { 'passive_filetypes': ['python'] }
+let g:syntastic_python_checkers = ['pylint']
+let g:syntastic_python_pylint_args = '--rcfile=~/.pylintrc' 
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 """"""""""""""""""""""""""""""""" jedi-vim
-"let g:jedi#use_splits_not_buffers = "left"
+let g:jedi#use_splits_not_buffers = "right"
 """"""""""""""""""""""""""""""""" Ack(ag)
 if executable('ag')
     let g:ackprg = 'ag --smart-case'
@@ -47,6 +53,10 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 """"""""""""""""""""""""""""""""" vim-session
 let g:session_autosave_periodic = 5
 let g:session_autoload = 'yes'
+""""""""""""""""""""""""""""""""" SimplyFold
+let g:SimpylFold_docstring_preview = 1
+autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
+autocmd BufWinLeave *.py setlocal foldexpr< foldmethod<
 """"""""""""""""""""""""""""""""" Settings
 " Set to auto read when a file is changed from the outside
 set autoread
