@@ -29,15 +29,16 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 " ignore .pyc etc.
 let NERDTreeIgnore = ['\.pyc$', '__pycache__']
 """"""""""""""""""""""""""""""""" Syntactic
-"let g:syntastic_mode_map = { 'passive_filetypes': ['python'] }
+let g:syntastic_mode_map = { 'passive_filetypes': ['python'] }
 let g:syntastic_python_checkers = ['pylint']
 let g:syntastic_python_pylint_args = '--rcfile=~/.pylintrc' 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 """"""""""""""""""""""""""""""""" jedi-vim
 let g:jedi#use_splits_not_buffers = "right"
+let g:jedi#show_call_signatures = "0"
 """"""""""""""""""""""""""""""""" Ack(ag)
 if executable('ag')
     let g:ackprg = 'ag --smart-case'
@@ -53,6 +54,7 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 """"""""""""""""""""""""""""""""" vim-session
 let g:session_autosave_periodic = 5
 let g:session_autoload = 'yes'
+let g:session_autosave = 'no'
 """"""""""""""""""""""""""""""""" SimplyFold
 let g:SimpylFold_docstring_preview = 1
 autocmd BufWinEnter *.py setlocal foldexpr=SimpylFold(v:lnum) foldmethod=expr
@@ -86,6 +88,7 @@ set hlsearch
 set nobackup
 set nowb
 set noswapfile
+set nowrap
 set termencoding=utf-8
 set number
 set showmode
@@ -104,24 +107,24 @@ set laststatus=2
 "nnoremap <C-Right> <C-W><C-L>
 "nnoremap <C-Left> <C-W><C-H>
 "
-"" tab navigation
-"nnoremap <C-h> :tabprevious<CR>
-"nnoremap <C-l> :tabnext<CR>
+"" buffer navigation
+nnoremap <C-h> :bprevious<CR>
+nnoremap <C-l> :bnext<CR>
 """"""""""""""""""""""""""""""' / tab/pane nav 1
 """"""""""""""""""""""""""""""' tab/pane nav 2
 " buffer navigation
-nnoremap <C-Right> :bnext<CR>
-nnoremap <C-Left> :bprevious<CR>
-nnoremap <C-x> :bp\|bd #<CR>
+"nnoremap <C-Right> :bnext<CR>
+"nnoremap <C-Left> :bprevious<CR>
+"nnoremap <C-x> :bp\|bd #<CR>
 
 "switch to pane up
-nnoremap <Esc>[1;3A <C-W><C-K>
+"nnoremap <Esc>[1;3A <C-W><C-K>
 "switch to pane down
-nnoremap <Esc>[1;3B <C-W><C-J>
+"nnoremap <Esc>[1;3B <C-W><C-J>
 "switch to pane right
-nnoremap <Esc>[1;3C <C-W><C-L>
+"nnoremap <Esc>[1;3C <C-W><C-L>
 "switch to left pane
-nnoremap <Esc>[1;3D <C-W><C-H>
+"nnoremap <Esc>[1;3D <C-W><C-H>
 """"""""""""""""""""""""""""""' / tab/pane nav 2
 
 " move lines
@@ -138,6 +141,7 @@ set modeline
 set mouse=a
 set encoding=utf-8
 set cursorline
+hi CursorLine term=bold cterm=bold guibg=Grey40
 set foldlevelstart=20
 set foldmethod=syntax
 
@@ -177,11 +181,12 @@ set viminfo='20,\"100,:20,%,n~/.vim/viminfo
 set go-=r go-=R go-=l go-=L go-=b
 
 " themes
-colorscheme monokai
+""colorscheme monokai
 
 " font
 set guifont=Monospace\ 9
 
 " tabs
+set tabstop=4
 au FileType python setl shiftwidth=4 tabstop=4 smartindent noexpandtab
 
