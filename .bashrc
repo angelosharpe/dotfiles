@@ -1,9 +1,19 @@
+## TMUX {{{
+# put remote/ssh into SESSION_TYPE when connected via SSH
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+    SESSION_TYPE=remote/ssh
+else
+    case $(ps -o comm= -p $PPID) in
+        sshd|*/sshd) SESSION_TYPE=remote/ssh;;
+    esac
+fi
+if [ -z ${TMUX} ] && [[ ${SESSION_TYPE} == "remote/ssh" ]]; then
+    /usr/bin/tmux -2 attach || /usr/bin/tmux -2
+fi
+#}}}
 ## OVERALL CONDITIONALS {{{
 _islinux=false
 [[ "$(uname -s)" =~ Linux|GNU|GNU/* ]] && _islinux=true
-
-_isarch=false
-[[ -f /etc/arch-release ]] && _isarch=true
 
 _isxrunning=false
 [[ -n "$DISPLAY" ]] && _isxrunning=true
@@ -60,19 +70,6 @@ _isroot=false
 #}}}
 ## EXPORTS {{{
   export PATH=/usr/local/bin:$PATH
-  #Ruby support
-  if which ruby &>/dev/null; then
-    GEM_DIR=$(ruby -rubygems -e 'puts Gem.user_dir')/bin
-    if [[ -d "$GEM_DIR" ]]; then
-      export PATH=$GEM_DIR:$PATH
-    fi
-  fi
-  if [[ -d "$HOME/bin" ]] ; then
-      PATH="$HOME/bin:$PATH"
-  fi
-  if which google-chrome-stable &>/dev/null; then
-    export CHROME_BIN=/usr/bin/google-chrome-stable
-  fi
   ## EDITOR #{{{
     if which vim &>/dev/null; then
       export EDITOR="vim"
@@ -143,39 +140,16 @@ _isroot=false
       alias halt='sudo halt'
     fi
   #}}}
-  # PACMAN ALIASES {{{
-    # we're on ARCH
-    if $_isarch; then
-      # we're not root
-      if ! $_isroot; then
-        alias pacman='sudo pacman'
-      fi
-      alias pacupg='pacman -Syu'            # Synchronize with repositories and then upgrade packages that are out of date on the local system.
-      alias pacupd='pacman -Sy'             # Refresh of all package lists after updating /etc/pacman.d/mirrorlist
-      alias pacin='pacman -S'               # Install specific package(s) from the repositories
-      alias pacinu='pacman -U'              # Install specific local package(s)
-      alias pacre='pacman -R'               # Remove the specified package(s), retaining its configuration(s) and required dependencies
-      alias pacun='pacman -Rcsn'            # Remove the specified package(s), its configuration(s) and unneeded dependencies
-      alias pacinfo='pacman -Si'            # Display information about a given package in the repositories
-      alias pacse='pacman -Ss'              # Search for package(s) in the repositories
-
-      alias pacupa='pacman -Sy && sudo abs' # Update and refresh the local package and ABS databases against repositories
-      alias pacind='pacman -S --asdeps'     # Install given package(s) as dependencies of another package
-      alias pacclean="pacman -Sc"           # Delete all not currently installed package files
-      alias pacmake="makepkg -fcsi"         # Make package from PKGBUILD file in current directory
-    fi
-  #}}}
-  # MULTIMEDIA {{{
-    if which get_flash_videos &>/dev/null; then
-      alias gfv='get_flash_videos -r 720p --subtitles'
-    fi
-  #}}}
   # LS {{{
     alias ls='ls -hF --color=auto'
     alias lr='ls -R'                    # recursive ls
     alias ll='ls -alh'
     alias la='ll -A'
     alias lm='la | less'
+  #}}}
+  # SSH {{{
+    alias pongo='ssh tmarek@10.33.17.26'
+    alias wizard='ssh tom@192.168.0.128'
   #}}}
 #}}}
 ## FUNCTIONS {{{
@@ -485,34 +459,6 @@ _isroot=false
       else
         echo "usage: compress <foo.tar.gz> ./foo ./bar"
       fi
-    }
-  #}}}
-  # CONVERT TO ISO {{{
-    to_iso () {
-      if [[ $# == 0 || $1 == "--help" || $1 == "-h" ]]; then
-        echo -e "Converts raw, bin, cue, ccd, img, mdf, nrg cd/dvd image files to ISO image file.\nUsage: to_iso file1 file2..."
-      fi
-      for i in $*; do
-        if [[ ! -f "$i" ]]; then
-          echo "'$i' is not a valid file; jumping it"
-        else
-          echo -n "converting $i..."
-          OUT=`echo $i | cut -d '.' -f 1`
-          case $i in
-                *.raw ) bchunk -v $i $OUT.iso;; #raw=bin #*.cue #*.bin
-          *.bin|*.cue ) bin2iso $i $OUT.iso;;
-          *.ccd|*.img ) ccd2iso $i $OUT.iso;; #Clone CD images
-                *.mdf ) mdf2iso $i $OUT.iso;; #Alcohol images
-                *.nrg ) nrg2iso $i $OUT.iso;; #nero images
-                    * ) echo "to_iso don't know de extension of '$i'";;
-          esac
-          if [[ $? != 0 ]]; then
-            echo -e "${R}ERROR!${W}"
-          else
-            echo -e "${G}done!${W}"
-          fi
-        fi
-      done
     }
   #}}}
   # REMIND ME, ITS IMPORTANT! {{{
