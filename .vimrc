@@ -181,7 +181,7 @@ set viminfo='20,\"100,:20,%,n~/.vim/viminfo
 set go-=r go-=R go-=l go-=L go-=b
 
 " themes
-""colorscheme monokai
+colorscheme monokai
 
 " font
 set guifont=Monospace\ 9
