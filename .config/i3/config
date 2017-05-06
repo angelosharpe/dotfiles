@@ -135,15 +135,13 @@ bindsym $mod+Shift+0 move container to workspace 10
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
-# lock the screen
-set $Locker exec "~/.config/i3/lock.sh" && sleep 1
 
 set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
 mode "$mode_system" {
-    bindsym l exec --no-startup-id $Locker, mode "default"
+    bindsym l exec --no-startup-id ~/.config/i3/lock.sh, mode "default"
     bindsym e exec --no-startup-id i3-msg exit, mode "default"
-    bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
-    bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
+    bindsym s exec --no-startup-id ~/.config/i3/lock.sh && systemctl suspend, mode "default"
+    bindsym h exec --no-startup-id ~/.config/i3/lock.sh && systemctl hibernate, mode "default"
     bindsym r exec --no-startup-id systemctl reboot, mode "default"
     bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"  
 
@@ -169,8 +167,8 @@ mode "resize" {
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Up resize grow height 10 px or 10 ppt
+        bindsym Down resize shrink height 10 px or 10 ppt
         bindsym Right resize grow width 10 px or 10 ppt
 
         # back to normal: Enter or Escape
@@ -194,14 +192,18 @@ bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 
 # configure displays
-exec xrandr --output DP1-1 --primary --mode 3440x1440 --scale 1.00x1.00
-exec xrandr --output eDP1 --mode 3840x2160 --scale 0.50x0.50 --right-of DP1-1
+exec xrandr --output eDP1 --mode 3840x2160 --scale 0.50x0.50
+# Resta
+exec xrandr --newmode "3440x1440_50.00"  344.00  3440 3672 4040 4640  1440 1443 1453 1484 -hsync +vsync && xrandr --addmode HDMI1 3440x1440_50.00 && xrandr --output HDMI1 --primary --mode 3440x1440_50.00 --scale 1.00x1.00 --left-of eDP1
+# Brno
+#exec xrandr --output DP1-1 --mode 1920x1080 --scale 1x1 --left-of eDP1
+
 exec gnome-settings-daemon
 
 # turn off/on laptop primary display
 bindsym $mod+u exec xrandr --output eDP1 --off
-bindsym $mod+i exec xrandr --output eDP1 --mode 3840x2160 --scale 0.50x0.50 --right-of DP1-1
-bindsym $mod+o exec xrandr --output eDP1 --mode 3840x2160 --scale 0.85x0.85
+bindsym $mod+i exec xrandr --output eDP1 --mode 3840x2160 --scale 0.5x0.5 --right-of DP1-2
+bindsym $mod+o exec xrandr --output eDP1 --mode 3840x2160 --scale 0.75x0.75
 
 # make applets work
 exec --no-startup-id dbus-send --session --dest=org.gnome.SessionManager /org/gnome/SessionManager org.gnome.SessionManager.RegisterClient string:i3.desktop string:''
