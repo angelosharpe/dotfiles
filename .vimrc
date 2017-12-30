@@ -188,5 +188,8 @@ set guifont=Monospace\ 9
 
 " tabs
 set tabstop=4
-au FileType python setl shiftwidth=4 tabstop=4 smartindent noexpandtab
+set shiftwidth=4
+set expandtab
+" Only need this at work
+" au FileType python setl shiftwidth=4 tabstop=4 smartindent noexpandtab
 

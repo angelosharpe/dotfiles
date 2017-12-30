@@ -1,0 +1,16 @@
+[DEFAULT]
+name = laptop only profile, 4k, 0.5x0.5 scale
+edid = b33f60b9db1ad5177f7d73cefa44d7f1
+args = --output eDP1 --primary --mode 3840x2160 --pos 0x0 --scale 0.50x0.50
+[just_laptop_screen]
+name = single laptop screen, same as default
+edid = b33f60b9db1ad5177f7d73cefa44d7f1
+args = --output eDP1 --primary --mode 3840x2160 --pos 0x0 --scale 0.50x0.50
+[brno_LG_1080p]
+name = 4k laptop + 1080p LG external display
+edid = 869f3564ba052210136e26b64354f9b3
+args = --output eDP1 --primary --mode 3840x2160 --pos 1920x0 --scale 0.50x0.50 --output DP1-1 --mode 1920x1080 --pos 0x0 --scale 1.00x1.00
+[my-screen-setup]
+name = my-screen-setup's xrandr profile
+edid = 05de082ea0506dca625408012478ddfe
+args = --output DP-1-1-1 --primary --mode 3440x1440 --pos 0x0 --scale 1.0x1.0 --left-of eDP-1-1 --output eDP-1-1 --mode 3840x2160 --pos 3440x0 --scale 1.0x1.0

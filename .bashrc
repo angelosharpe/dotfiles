@@ -147,8 +147,9 @@ _isroot=false
     alias la='ll -A'
     alias lm='la | less'
   #}}}
-  # SSH {{{
-    alias pongo='ssh tmarek@10.33.17.26'
+  # WORK {{{
+    alias pongo='ssh -C -D 1080 tomas.marek@10.33.35.39 -L15672:172.31.255.2:15672 -L5672:172.31.255.2:5672 2> /dev/null'
+    alias pongo_no_rabbit='ssh -C -D 1080 tomas.marek@10.33.35.39'
     alias wizard='ssh tom@192.168.0.128'
   #}}}
 #}}}
