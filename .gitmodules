@@ -1,0 +1,3 @@
+[submodule "3rd_party/i3blocks-networking-blocklet"]
+	path = 3rd_party/i3blocks-networking-blocklet
+	url = https://github.com/tommarek/i3blocks-networking-blocklet

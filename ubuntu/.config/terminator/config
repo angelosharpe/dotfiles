@@ -1,0 +1,24 @@
+[global_config]
+  enabled_plugins = APTURLHandler, MavenPluginURLHandler, LaunchpadBugURLHandler
+[keybindings]
+  go_left = <Alt>KP_4
+  go_down = <Alt>KP_2
+  go_right = <Alt>KP_6
+  go_up = <Alt>KP_8
+[profiles]
+  [[default]]
+    background_image = None
+    use_system_font = False
+    scroll_on_output = False
+    show_titlebar = False
+    font = Monospace 9
+    scrollback_infinite = True
+[layouts]
+  [[default]]
+    [[[child1]]]
+      type = Terminal
+      parent = window0
+    [[[window0]]]
+      type = Window
+      parent = ""
+[plugins]

@@ -1,0 +1,1 @@
+/home/tom/.config/fisherman/bobthefish/fish_mode_prompt.fish

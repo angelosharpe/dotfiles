@@ -1,0 +1,8 @@
+#!/bin/bash
+ip route del default via 192.168.14.1 dev enxf8cab868700c
+ip route add default via 192.168.14.1 dev enxf8cab868700c proto static metric 0
+
+ip route add 54.72.0.0/16 via 10.197.84.$1 dev tun0
+ip route add 10.33.0.0/16 via 10.197.84.$1 dev tun0
+ip route add 10.103.20.0/24 via 10.197.84.$1 dev tun0
+ip route add 83.244.0.0/16 via 10.197.84.$1 dev tun0
