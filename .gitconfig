@@ -1,0 +1,16 @@
+[user]
+    name = Tom Marek
+    email = tm.tomas.marek@gmail.com
+[color]
+    ui = auto
+[sendemail]
+    smtpserver = smtp.gmail.com
+    smtpserverport = 587
+    smtpencryption = tls
+    smtpuser = tomas.marek@gmail.com
+    chainreplyto = false
+[alias]
+    co = checkout
+    br = branch
+    ci = commit
+    st = status
