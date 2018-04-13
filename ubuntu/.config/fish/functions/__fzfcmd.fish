@@ -1,1 +1,0 @@
-/home/tom/.config/fisherman/fzf/functions/__fzfcmd.fish
